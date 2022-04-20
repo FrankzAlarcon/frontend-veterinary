@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import NewPatient from './pages/NewPatient';
 import SignIn from './pages/SignIn';
 import Tasks from './pages/Tasks';
-import Patients from './pages/Patients';
+import PatientList from './pages/PatientList';
 import Auth from './components/Auth';
 import UserProvider from './context/UserProvider';
 
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           {/* Cambiar el Navigate con un componente que verifique auth */}
           <Route path="/" element={<Auth><Layout /></Auth>}>
-            <Route index element={<Patients />} />
+            <Route index element={<PatientList />} />
             <Route path="new-patient" element={<Tasks />} />
             <Route path="tasks" element={<NewPatient />} />
           </Route>
