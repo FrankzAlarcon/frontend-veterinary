@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+.link {
+  @apply p-2 min-w-min extra-sm:min-w-max sm:w-36 sm:uppercase md:w-full text-center rounded-md transition-colors duration-300 hover:text-white hover:bg-violet-400
+}
