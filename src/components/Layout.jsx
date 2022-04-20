@@ -8,12 +8,6 @@ function Layout() {
     if (location.pathname === path) {
       return styles;
     }
-    if (location.pathname === path) {
-      return styles;
-    }
-    if (location.pathname === path) {
-      return styles;
-    }
     return 'bg-white sm:font-semibold';
   };
   return (
