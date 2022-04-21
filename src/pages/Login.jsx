@@ -102,7 +102,7 @@ function Login() {
                 <p className="text-center mt-5">
                   ¿Aún no tienes una cuenta?
                   {' '}
-                  <Link to="/register"><span className="text-indigo-600 font-bold inline-block max-w-max">Registrate Aquí</span></Link>
+                  <Link to="/register"><span className="text-indigo-600 font-bold inline-block max-w-max hover:underline">Registrate Aquí</span></Link>
                 </p>
               </Form>
             </>

@@ -10,6 +10,7 @@ import Tasks from './pages/Tasks';
 import PatientList from './pages/PatientList';
 import Auth from './components/Auth';
 import UserProvider from './context/UserProvider';
+import PatientDetails from './pages/PatientDetails';
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
           {/* Cambiar el Navigate con un componente que verifique auth */}
           <Route path="/" element={<Auth><Layout /></Auth>}>
             <Route index element={<PatientList />} />
-            <Route path="new-patient" element={<Tasks />} />
-            <Route path="tasks" element={<NewPatient />} />
+            <Route path="new-patient" element={<NewPatient />} />
+            <Route path="tasks" element={<Tasks />} />
+            <Route path="patient/:id" element={<PatientDetails />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignIn />} />

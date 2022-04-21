@@ -130,7 +130,7 @@ function SignIn() {
                 <p className="text-center mt-5">
                   ¿Ya tienes una cuenta?
                   {' '}
-                  <Link to="/login"><span className="text-indigo-600 font-bold inline-block max-w-max">Ingresa Aquí</span></Link>
+                  <Link to="/login"><span className="text-indigo-600 font-bold inline-block max-w-max hover:underline">Ingresa Aquí</span></Link>
                 </p>
               </Form>
             </>

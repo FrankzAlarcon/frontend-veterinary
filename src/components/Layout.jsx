@@ -12,7 +12,7 @@ function Layout() {
   };
   return (
     <div className="md:flex">
-      <nav className="flex justify-evenly py-4 bg-indigo-600 md:h-screen md:pt-10 md:p-4 md:w-1/4 md:flex-col md:justify-start md:gap-y-10 md:items-center">
+      <nav className="flex fixed w-full md:static justify-evenly py-4 bg-indigo-600 md:h-screen md:pt-10 md:p-4 md:w-1/4 md:flex-col md:justify-start md:gap-y-10 md:items-center">
         <Link
           className={`${isSelected('/')} link `}
           to="/"
@@ -32,7 +32,7 @@ function Layout() {
           Mis Tareas
         </Link>
       </nav>
-      <div className="md:w-3/4 p-5">
+      <div className="md:w-3/4 p-5 h-screen overflow-y-scroll pt-24 md:pt-5 lg:px-8">
         <Outlet />
       </div>
     </div>
