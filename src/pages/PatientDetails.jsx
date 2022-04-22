@@ -38,13 +38,32 @@ function PatientDetails() {
           {patient.name}
         </p>
         <p className="font-semibold">
-          <span className="uppercase text-gray-400 font-bold">Mascota: </span>
-          {patient.petName}
-        </p>
-        <p className="font-semibold">
           <span className="uppercase text-gray-400 font-bold">Email: </span>
           {patient.email}
         </p>
+        <div className="font-semibold">
+          <span className="uppercase text-gray-400 font-bold text-center block my-2">Mascota(s): </span>
+          {/* <div className="w-full"> */}
+          <table className="mx-auto border-collapse border-2 w-full md:w-4/5 lg:w-1/2">
+            <thead className="border-b-2">
+              <tr className="uppercase bg-blue-800 text-white">
+                <th className="py-2 px-4 font-black">Nombre</th>
+                <th className="p-2 border-l-2 font-black">Tipo Animal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                  patient.pets?.map((pet) => (
+                    <tr key={pet.id} className="border-b-2">
+                      <td className="p-2">{pet.petName}</td>
+                      <td className="border-l-2 p-2">{pet.animalType}</td>
+                    </tr>
+                  ))
+                }
+            </tbody>
+          </table>
+          {/* </div> */}
+        </div>
         <div>
           <h2 className="uppercase font-black text-center text-xl text-violet-400">Citas</h2>
           <div className="flex justify-evenly my-3">

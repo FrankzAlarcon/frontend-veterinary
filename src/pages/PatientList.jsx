@@ -51,7 +51,7 @@ function PatientList() {
 
   return (
     <div>
-      <h1 className="text-3xl font-black my-3 text-center md:text-5xl lg:text-6xl">
+      <h1 className="text-3xl font-black my-3 text-center md:text-4xl lg:text-5xl">
         Listado de
         {' '}
         <span className="text-indigo-600">Pacientes</span>

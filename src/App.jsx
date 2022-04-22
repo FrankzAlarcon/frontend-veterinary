@@ -17,7 +17,6 @@ function App() {
     <BrowserRouter>
       <UserProvider>
         <Routes>
-          {/* Cambiar el Navigate con un componente que verifique auth */}
           <Route path="/" element={<Auth><Layout /></Auth>}>
             <Route index element={<PatientList />} />
             <Route path="new-patient" element={<NewPatient />} />

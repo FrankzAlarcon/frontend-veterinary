@@ -10,8 +10,8 @@ function Patient({ patient, handleDelete }) {
           {patient.name}
         </p>
         <p className="font-semibold">
-          <span className="uppercase text-gray-400 font-bold">Mascota: </span>
-          {patient.pet_name}
+          <span className="uppercase text-gray-400 font-bold">Numero de Mascotas: </span>
+          {patient.num_pets}
         </p>
         <p className="font-semibold">
           <span className="uppercase text-gray-400 font-bold">Email: </span>

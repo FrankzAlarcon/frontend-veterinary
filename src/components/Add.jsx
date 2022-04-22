@@ -5,7 +5,7 @@ function Add({ onClick }) {
     <button type="button" onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-16 w-16 md:h-20 md:w-20"
+        className="h-16 w-16 md:h-20 md:w-20 hover:scale-110 transition-transform"
         viewBox="0 0 20 20"
         fill="currentColor"
       >

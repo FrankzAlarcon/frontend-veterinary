@@ -9,7 +9,7 @@ import useUserValues from '../hooks/useUserValues';
 
 function Login() {
   const [error, setError] = useState('');
-  const { setUser, user } = useUserValues();
+  const { setUser, user, setTasks } = useUserValues();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -40,8 +40,12 @@ function Login() {
       setUser(userBody);
       navigate('/');
       setError('');
+      const responseTasks = await window.fetch(`${import.meta.env.VITE_API_URL}/veterinarians/${key}/tasks`);
+      const { body: tasksBody } = await responseTasks.json();
+      setTasks(tasksBody);
       return resetForm();
     } catch (e) {
+      setError('Hemos tenido problemas. Por favor, Intentalo más tarde');
       return console.log(e);
     } finally {
       setLoading(false);
