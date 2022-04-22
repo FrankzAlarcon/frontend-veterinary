@@ -11,6 +11,14 @@ function Appointment({ appointment }) {
           {formatDate(appointment.date)}
         </p>
         <p className="font-semibold">
+          <span className="uppercase text-gray-400 font-bold">Mascota: </span>
+          {appointment.pet.petName}
+        </p>
+        <p className="font-semibold">
+          <span className="uppercase text-gray-400 font-bold">Tipo de animal: </span>
+          {appointment.pet.animalType}
+        </p>
+        <p className="font-semibold">
           <span className="uppercase text-gray-400 font-bold">Síntomas: </span>
           {appointment.symptoms}
         </p>

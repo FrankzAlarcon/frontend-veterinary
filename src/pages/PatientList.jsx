@@ -10,14 +10,15 @@ function PatientList() {
   const { user } = useUserValues();
   const [patients, setPatients] = useState([]);
   const [input, setInput] = useState('');
-
   useEffect(() => {
-    const getPatientsOfVeterinary = async () => {
-      const response = await window.fetch(`${import.meta.env.VITE_API_URL}/veterinarians/${user.id}/patients`);
-      const { body } = await response.json();
-      setPatients(body);
-    };
-    getPatientsOfVeterinary();
+    if (Object.keys(patients).length === 0) {
+      const getPatientsOfVeterinary = async () => {
+        const response = await window.fetch(`${import.meta.env.VITE_API_URL}/veterinarians/${user.id}/patients`);
+        const { body } = await response.json();
+        setPatients(body);
+      };
+      getPatientsOfVeterinary();
+    }
   }, []);
 
   const handleDelete = (id, name) => {
