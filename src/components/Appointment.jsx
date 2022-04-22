@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { formatDate, formatMoney } from '../helpers';
 
 function Appointment({ appointment }) {
-  console.log(appointment);
   return (
     <div className="w-full bg-slate-100 rounded-md my-3 shadow-md p-2 md:flex md:gap-x-5 lg:px-4 lg:py-3">
       <div className="space-y-1 w-full">
