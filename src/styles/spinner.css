@@ -3,7 +3,9 @@
   width: 70px;
   text-align: center;
 }
-
+.lazy {
+  margin-top: 10rem;
+}
 .spinner > div {
   width: 18px;
   height: 18px;

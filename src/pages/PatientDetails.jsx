@@ -1,11 +1,18 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2/dist/sweetalert2.all';
 import Appointment from '../components/Appointment';
+import { formatMoney } from '../helpers';
 
 function PatientDetails() {
   const { id } = useParams();
   const [patient, setPatient] = useState({});
   const [filter, setFilter] = useState('pendientes');
+  const [isCompleting, setIsCompleting] = useState(false);
+  const [prescriptionInput, setPrescriptionInput] = useState('');
+  const [priceInput, setPriceInput] = useState('');
+  const [appointmentCompletingId, setAppointmentCompletingId] = useState(0);
   useEffect(() => {
     const getPatientDetails = async () => {
       const response = await window.fetch(`${import.meta.env.VITE_API_URL}/patients/${id}`);
@@ -14,12 +21,69 @@ function PatientDetails() {
     };
     getPatientDetails();
   }, []);
+
   const filteredAppointments = patient.appointments?.filter((appointment) => {
     if (filter === 'pendientes') {
       return appointment.isCompleted === false;
     }
     return appointment.isCompleted;
   });
+  const handleCompleteAppointment = (appointmentId) => {
+    setAppointmentCompletingId(appointmentId);
+    setIsCompleting(true);
+    if (priceInput && prescriptionInput) {
+      Swal.fire({
+        title: 'Confirmación',
+        html: `<p><span style="font-weight: bold">Receta:</span> ${prescriptionInput}</p>
+        <p><span style="font-weight: bold">Precio:</span>: ${formatMoney(Number(priceInput))}</p>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sí, guardar!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const responseComplete = await window.fetch(`${import.meta.env.VITE_API_URL}/appointments/${appointmentId}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              prescription: prescriptionInput,
+              isCompleted: true,
+              price: Number(priceInput),
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          const { body: bodyComplete } = await responseComplete.json();
+          const responseAppointment = await window.fetch(`${import.meta.env.VITE_API_URL}/appointments/${bodyComplete.id}`);
+          Swal.fire(
+            'Guardado!',
+            'Se ha completado la cita',
+            'success',
+          );
+          const { body: bodyAppointment } = await responseAppointment.json();
+          const { appointments } = patient;
+          const newAppointments = appointments.map((appointment) => (appointment.id === bodyAppointment.id ? bodyAppointment : appointment));
+          const newPat = { ...patient, appointments: newAppointments };
+          setPatient(newPat);
+
+          setAppointmentCompletingId(0);
+          setIsCompleting(false);
+          setPrescriptionInput('');
+          setPriceInput('');
+        }
+      });
+    } else {
+      console.log('no has escrito nada');
+    }
+  };
+  const handleCancel = () => {
+    setAppointmentCompletingId(0);
+    setIsCompleting(false);
+    setPrescriptionInput('');
+    setPriceInput('');
+  };
   return (
     <div>
       <h1 className="text-3xl font-black my-3 text-center md:text-5xl lg:text-6xl">
@@ -43,7 +107,6 @@ function PatientDetails() {
         </p>
         <div className="font-semibold">
           <span className="uppercase text-gray-400 font-bold text-center block my-2">Mascota(s): </span>
-          {/* <div className="w-full"> */}
           <table className="mx-auto border-collapse border-2 w-full md:w-4/5 lg:w-1/2">
             <thead className="border-b-2">
               <tr className="uppercase bg-blue-800 text-white">
@@ -62,7 +125,6 @@ function PatientDetails() {
                 }
             </tbody>
           </table>
-          {/* </div> */}
         </div>
         <div>
           <h2 className="uppercase font-black text-center text-xl text-violet-400">Citas</h2>
@@ -89,7 +151,18 @@ function PatientDetails() {
           {
             filteredAppointments
               ?.map((appointment) => (
-                <Appointment key={appointment.id} appointment={appointment} />
+                <Appointment
+                  key={appointment.id}
+                  appointment={appointment}
+                  handleCompleteAppointment={handleCompleteAppointment}
+                  isCompleting={isCompleting}
+                  appointmentCompletingId={appointmentCompletingId}
+                  handleCancel={handleCancel}
+                  setPrescriptionInput={setPrescriptionInput}
+                  setPriceInput={setPriceInput}
+                  prescriptionInput={prescriptionInput}
+                  priceInput={priceInput}
+                />
               ))
           }
         </div>

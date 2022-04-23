@@ -42,7 +42,7 @@ function Tasks() {
         <option value="">--Filtra por prioridad--</option>
         <option value="high">Alta</option>
         <option value="medium">Media</option>
-        <option value="low">Low</option>
+        <option value="low">Baja</option>
       </select>
       <div className="my-5">
         {loading && <Spinner />}

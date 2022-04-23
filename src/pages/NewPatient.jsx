@@ -4,9 +4,14 @@ import Swal from 'sweetalert2/dist/sweetalert2.all';
 import { useNavigate } from 'react-router-dom';
 import { newPatientSchema } from '../schemas';
 import Alert from '../components/Alert';
+import useUserValues from '../hooks/useUserValues';
+import { formatDateUS } from '../helpers';
+import Spinner from '../components/Spinner';
 
 function NewPatient() {
   const navigate = useNavigate();
+  const { user } = useUserValues();
+  const [loading, setLoading] = useState(false);
   const [newPatient, setNewPatient] = useState({
     name: '',
     email: '',
@@ -18,18 +23,38 @@ function NewPatient() {
     prescription: '',
     price: 0,
   });
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true);
+    const options = (value) => ({
+      method: 'POST',
+      body: JSON.stringify(value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const { date } = values;
+    const responsePatient = await window.fetch(`${import.meta.env.VITE_API_URL}/patients`, options({ name: values.name, email: values.email }));
+    const { body: bodyPatient } = await responsePatient.json();
+    const responsePet = await window.fetch(`${import.meta.env.VITE_API_URL}/patients/${bodyPatient.id}/pets`, options({ petName: values.petName, animalType: values.animalType }));
+    const { body: bodyPet } = await responsePet.json();
+    await window.fetch(`${import.meta.env.VITE_API_URL}/appointments`, options({
+      veterinarianId: user.id,
+      patientId: bodyPatient.id,
+      petId: bodyPet.id,
+      date: formatDateUS(date),
+      symptoms: values.symptoms,
+      isCompleted: values.isCompleted,
+    }));
     Swal.fire(
       `Se ha agregado la cita con el paciente: ${values.name}`,
       '',
       'success',
     ).then(() => {
       // navigate a details
-      console.log('hola');
+      navigate(`/patient/${bodyPatient.id}`);
     });
-    // Promise.all(Setteled) para los 3 fectch POST
-    setNewPatient({ ...newPatient, ...values });
-    console.log(values);
+    setLoading(false);
+    resetForm();
   };
   return (
     <div>
@@ -142,11 +167,15 @@ function NewPatient() {
                     {errors.symptoms && touched.symptoms && <Alert type="error">{errors.symptoms}</Alert>}
                   </label>
                 </div>
-                <input
-                  className="w-full p-2 uppercase text-white bg-indigo-600 my-3 font-bold cursor-pointer hover:bg-indigo-700 transition-colors"
-                  type="submit"
-                  value="Agregar paciente"
-                />
+                {
+                  loading ? <Spinner /> : (
+                    <input
+                      className="w-full p-2 uppercase text-white bg-indigo-600 my-3 font-bold cursor-pointer hover:bg-indigo-700 transition-colors"
+                      type="submit"
+                      value="Agregar paciente"
+                    />
+                  )
+                }
               </Form>
             )
           }

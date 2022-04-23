@@ -8,6 +8,11 @@ export function formatDate(dateString) {
   });
 }
 
+export function formatDateUS(dateString) {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 export function formatMoney(number) {
   return number.toLocaleString('en-US', {
     currency: 'USD',

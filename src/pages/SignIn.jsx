@@ -95,7 +95,6 @@ function SignIn() {
                     placeholder="Email"
                   />
                   {errors.email && touched.email && <Alert>{errors.email}</Alert>}
-
                 </label>
                 <label htmlFor="password" aria-controls="password">
                   <p className="uppercase font-bold text-gray-400">Contraseña</p>

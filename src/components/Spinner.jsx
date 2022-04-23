@@ -1,9 +1,9 @@
 import React from 'react';
 import '../styles/spinner.css';
 
-function Spinner() {
+function Spinner({ type }) {
   return (
-    <div className="spinner">
+    <div className={`spinner ${type === 'lazy' ? 'lazy' : ''}`}>
       <div className="bounce1" />
       <div className="bounce2" />
       <div className="bounce3" />

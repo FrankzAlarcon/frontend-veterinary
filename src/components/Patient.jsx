@@ -36,12 +36,12 @@ function Patient({ patient, handleDelete }) {
           Detalles
         </Link>
         <Link
-          to={`/editar/${patient.id}`}
+          to={`/new-appointment/${patient.id}`}
           className="p-2 text-center bg-indigo-500 rounded-md uppercase font-bold text-white hover:bg-indigo-700 transition-colors"
           type="button"
           aria-controls="button"
         >
-          Editar
+          Nueva Cita
         </Link>
         <button
           className="p-2  bg-red-600 rounded-md uppercase font-bold text-white hover:bg-red-700 transition-colors"
