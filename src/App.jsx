@@ -13,7 +13,8 @@ const Tasks = React.lazy(() => import('./pages/Tasks'));
 const PatientDetails = React.lazy(() => import('./pages/PatientDetails'));
 const Layout = React.lazy(() => import('./components/Layout'));
 const SignIn = React.lazy(() => import('./pages/SignIn'));
-
+const EditAppointment = React.lazy(() => import('./pages/EditAppointment'));
+const NewAppointment = React.lazy(() => import('./pages/NewAppointment'));
 function App() {
   return (
     <Suspense fallback={<Spinner type="lazy" />}>
@@ -24,7 +25,10 @@ function App() {
               <Route index element={<PatientList />} />
               <Route path="new-patient" element={<NewPatient />} />
               <Route path="tasks" element={<Tasks />} />
-              <Route path="patient/:id" element={<PatientDetails />} />
+              <Route path="patient/:id" element={<PatientDetails />}>
+                <Route path="edit-appointment/:appointmentId" element={<EditAppointment />} />
+              </Route>
+              <Route path="patient/:id/new-appointment" element={<NewAppointment />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<SignIn />} />

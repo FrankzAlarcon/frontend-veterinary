@@ -3,19 +3,23 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2/dist/sweetalert2.all';
 import Alert from '../components/Alert';
 import Patient from '../components/Patient';
-import Searcher from '../components/Searcher';
+import Input from '../components/Input';
+import Spinner from '../components/Spinner';
 import useUserValues from '../hooks/useUserValues';
 
 function PatientList() {
   const { user } = useUserValues();
   const [patients, setPatients] = useState([]);
+  const [loading, setloading] = useState(false);
   const [input, setInput] = useState('');
   useEffect(() => {
     if (Object.keys(patients).length === 0) {
+      setloading(true);
       const getPatientsOfVeterinary = async () => {
         const response = await window.fetch(`${import.meta.env.VITE_API_URL}/veterinarians/${user.id}/patients`);
         const { body } = await response.json();
         setPatients(body);
+        setloading(false);
       };
       getPatientsOfVeterinary();
     }
@@ -62,9 +66,10 @@ function PatientList() {
         {' '}
         <span className="text-indigo-600 font-bold">Pacientes y Citas</span>
       </p>
-      <Searcher input={input} setInput={setInput} placeholder="Escribe el nombre del propietario" />
+      <Input input={input} setInput={setInput} placeholder="Escribe el nombre del propietario" />
       <div>
-        {patients.length === 0 && (
+        {loading && <Spinner />}
+        {patients.length === 0 && !loading && (
         <div
           className="w-full text-center"
         >

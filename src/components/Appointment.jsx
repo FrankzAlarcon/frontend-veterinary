@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formatDate, formatMoney } from '../helpers';
 
 function Appointment({
@@ -6,6 +7,8 @@ function Appointment({
   handleEditAppointment, handleCancel, setPriceInput,
   setPrescriptionInput, priceInput, prescriptionInput,
 }) {
+  const navigate = useNavigate();
+  const { id } = useParams();
   return (
     <div className="w-full bg-slate-100 rounded-md my-3 shadow-md p-2 ">
       <div className="md:flex md:gap-x-5 lg:px-4 lg:py-3">
@@ -85,7 +88,7 @@ function Appointment({
               type="button"
               aria-controls="button"
               onClick={(isCompleting && appointmentCompletingId === appointment.id)
-                ? handleCancel : handleEditAppointment}
+                ? handleCancel : () => navigate(`edit-appointment/${appointment.id}`)}
             >
               {(isCompleting && appointmentCompletingId === appointment.id) ? 'Cancelar' : 'Editar'}
             </button>

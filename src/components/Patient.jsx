@@ -36,7 +36,7 @@ function Patient({ patient, handleDelete }) {
           Detalles
         </Link>
         <Link
-          to={`/new-appointment/${patient.id}`}
+          to={`patient/${patient.id}/new-appointment`}
           className="p-2 text-center bg-indigo-500 rounded-md uppercase font-bold text-white hover:bg-indigo-700 transition-colors"
           type="button"
           aria-controls="button"

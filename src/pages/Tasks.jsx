@@ -1,7 +1,7 @@
 import React from 'react';
 import Add from '../components/Add';
 import Alert from '../components/Alert';
-import Searcher from '../components/Searcher';
+import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import Task from '../components/Task';
 import useTasks from '../hooks/useTasks';
@@ -32,7 +32,7 @@ function Tasks() {
         {' '}
         <span className="text-indigo-600 font-bold">Tareas y Cosas por hacer</span>
       </p>
-      <Searcher input={input} setInput={setInput} placeholder="Filtra tus tareas" />
+      <Input input={input} setInput={setInput} placeholder="Filtra tus tareas" />
       <select
         onChange={(e) => setPriorityFilter(e.target.value)}
         className="w-full p-2 mt-3 rounded-md md:w-1/2 mx-auto block border-2"
