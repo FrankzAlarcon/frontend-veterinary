@@ -15,6 +15,8 @@ const Layout = React.lazy(() => import('./components/Layout'));
 const SignIn = React.lazy(() => import('./pages/SignIn'));
 const EditAppointment = React.lazy(() => import('./pages/EditAppointment'));
 const NewAppointment = React.lazy(() => import('./pages/NewAppointment'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+
 function App() {
   return (
     <Suspense fallback={<Spinner type="lazy" />}>
@@ -32,6 +34,7 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<SignIn />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </UserProvider>
       </BrowserRouter>

@@ -32,6 +32,7 @@ function Task({ task, handleDeleteTask, handleEditTask }) {
       <div className="my-2 flex justify-evenly">
         <button
           type="button"
+          aria-controls="button"
           onClick={() => handleEditTask(task)}
           className="bg-indigo-600 py-2 px-4 rounded-md uppercase text-white font-bold hover:bg-indigo-700 transition-colors"
         >
@@ -40,6 +41,7 @@ function Task({ task, handleDeleteTask, handleEditTask }) {
         <button
           className="bg-red-600 py-2 px-4 rounded-md uppercase text-white font-bold hover:bg-red-700 transition-colors"
           type="button"
+          aria-controls="button"
           onClick={() => handleDeleteTask(task.id)}
         >
           Eliminar

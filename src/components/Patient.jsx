@@ -30,16 +30,12 @@ function Patient({ patient, handleDelete }) {
         <Link
           to={`patient/${patient.id}`}
           className="p-2 text-center bg-yellow-400 rounded-md uppercase font-bold text-white hover:bg-yellow-500 transition-colors"
-          type="button"
-          aria-controls="button"
         >
           Detalles
         </Link>
         <Link
           to={`patient/${patient.id}/new-appointment`}
           className="p-2 text-center bg-indigo-500 rounded-md uppercase font-bold text-white hover:bg-indigo-700 transition-colors"
-          type="button"
-          aria-controls="button"
         >
           Nueva Cita
         </Link>

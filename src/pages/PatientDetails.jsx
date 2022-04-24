@@ -21,12 +21,17 @@ function PatientDetails() {
   const [addingNewPet, setAddingNewPet] = useState(false);
   const [nameNewPet, setNameNewPet] = useState('');
   const [animalTypeNewPet, setAnimalTypeNewPet] = useState('');
+  const [isEditingPatient, setIsEditingPatient] = useState(false);
+  const [nameInput, setNameInput] = useState('');
+  const [emailInput, setEmailInput] = useState('');
 
   useEffect(() => {
     getPatientDetails(id)
       .then(({ body }) => {
         setPatient(body);
         setPets(body.pets);
+        setNameInput(body.name);
+        setEmailInput(body.email);
       });
   }, [refreshPatient]);
 
@@ -125,6 +130,40 @@ function PatientDetails() {
     }
   };
 
+  const handleEditPatient = () => {
+    setIsEditingPatient(true);
+  };
+
+  const handleCancelEditPatient = () => {
+    setIsEditingPatient(false);
+    setNameInput(patient.name);
+    setEmailInput(patient.email);
+  };
+  const handleSaveEditPatient = async () => {
+    try {
+      if (nameInput === patient.name && emailInput === patient.email) {
+        setIsEditingPatient(false);
+        return;
+      }
+      const changes = {
+        name: nameInput,
+        email: emailInput,
+      };
+      console.log(`${import.meta.env.VITE_API_URL}/patients/${patient.id}`);
+      await window.fetch(`${import.meta.env.VITE_API_URL}/patients/${patient.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(changes),
+        headers: {
+          'Content-Type': 'Application/json',
+        },
+      });
+      setPatient({ ...patient, ...changes });
+      setIsEditingPatient(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     appointmentId ? <Outlet context={[patient, setPatient, pets]} />
       : (
@@ -140,16 +179,55 @@ function PatientDetails() {
             <span className="text-indigo-600 font-bold"> citas de tus Pacientes</span>
           </p>
           <div className="space-y-2 bg-white shadow-md rounded-md p-2 lg:p-4">
+            <div className="md:flex md:flex-row-reverse justify-between">
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  aria-controls="button"
+                  className={`${isEditingPatient ? 'bg-lime-500 hover:bg-lime-400' : 'bg-indigo-600 hover:bg-indigo-700'} w-full uppercase font-bold  transition-colors text-white p-2 md:max-w-fit lg:max-w-max md:rounded-md mr-2`}
+                  onClick={isEditingPatient ? handleSaveEditPatient : handleEditPatient}
+                >
+                  {isEditingPatient ? 'Guardar cambios' : 'Editar Paciente'}
+                </button>
+                {isEditingPatient && (
+                  <button
+                    type="button"
+                    aria-controls="button"
+                    className="bg-red-600 w-full uppercase font-bold hover:bg-red-700 transition-colors text-white p-2 md:max-w-fit lg:max-w-max md:rounded-md mr-2"
+                    onClick={handleCancelEditPatient}
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
+              <p className="font-semibold mt-2 md:flex-grow">
+                <span className="uppercase text-gray-500 font-bold">Propietario: </span>
+                {isEditingPatient ? (
+                  <Input
+                    name="name"
+                    input={nameInput}
+                    setInput={setNameInput}
+                    placeholder="Ingrese el nombre"
+                    inlineBlock
+                  />
+                ) : patient.name}
+              </p>
+            </div>
             <p className="font-semibold">
-              <span className="uppercase text-gray-400 font-bold">Propietario: </span>
-              {patient.name}
-            </p>
-            <p className="font-semibold">
-              <span className="uppercase text-gray-400 font-bold">Email: </span>
-              {patient.email}
+              <span className="uppercase text-gray-500 font-bold">Email: </span>
+              {isEditingPatient ? (
+                <Input
+                  name="email"
+                  type="email"
+                  input={emailInput}
+                  setInput={setEmailInput}
+                  placeholder="Ingrese el email"
+                  inlineBlock
+                />
+              ) : patient.email}
             </p>
             <div className="font-semibold">
-              <span className="uppercase text-gray-400 font-bold text-center block my-2">Mascota(s): </span>
+              <span className="uppercase text-gray-500 font-bold text-center block my-2">Mascota(s): </span>
               <table className="mx-auto border-collapse border-2 w-full md:w-4/5 lg:w-1/2">
                 <thead className="border-b-2">
                   <tr className="uppercase bg-blue-800 text-white">
@@ -190,6 +268,7 @@ function PatientDetails() {
                 <div className={`${addingNewPet ? 'grid grid-cols-2 gap-x-2' : ''} `}>
                   <button
                     type="button"
+                    aria-controls="button"
                     className={`${addingNewPet ? 'bg-lime-500 hover:bg-lime-400' : 'bg-indigo-600 hover:bg-indigo-700'} w-full p-2 uppercase text-white  my-3 font-bold cursor-pointer  transition-colors`}
                     onClick={addingNewPet ? handleSaveNewPet : handleAddNewPet}
                   >
@@ -198,6 +277,7 @@ function PatientDetails() {
                   {addingNewPet && (
                   <button
                     type="button"
+                    aria-controls="button"
                     className="bg-red-600 hover:bg-red-700 w-full p-2 uppercase text-white  my-3 font-bold cursor-pointer  transition-colors"
                     onClick={handleCancelNewPet}
                   >

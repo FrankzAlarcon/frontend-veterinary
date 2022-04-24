@@ -9,7 +9,7 @@ import { newPatientSchema } from '../schemas';
 import useUserValues from '../hooks/useUserValues';
 
 function EditForm({ patient }) {
-  const { setRefreshPatient, refreshPatient } = useUserValues();
+  const { setRefreshPatient, refreshPatient, user } = useUserValues();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -18,6 +18,7 @@ function EditForm({ patient }) {
   const [newPet, setNewPet] = useState(false);
   const [petNameInput, setPetNameInput] = useState('');
   const [animalTypeInput, setAnimalTypeInput] = useState('');
+  const [creatingAppointment, setCreatingAppointment] = useState(false);
 
   useEffect(() => {
     if (Object.keys(patient).length > 0) {
@@ -33,6 +34,7 @@ function EditForm({ patient }) {
           date: formatDateInput(appointment.date),
           symptoms: appointment.symptoms,
         });
+        setCreatingAppointment(false);
       } else {
         setEditPatient({
           name: patient.name,
@@ -43,6 +45,7 @@ function EditForm({ patient }) {
           date: formatDateInput(new Date()),
           symptoms: '',
         });
+        setCreatingAppointment(true);
         // Modificar el handle submit para
         // crear el nuevo appointment, considerar si se crea nueva mascota
       }
@@ -73,14 +76,10 @@ function EditForm({ patient }) {
       setLoading(true);
       const { petSelected } = editPatient;
       const changes = {
+        petId: petSelected,
         symptoms: values.symptoms,
         date: formatDateUS(values.date),
       };
-      const appointment = patient.appointments
-        .find((appoint) => appoint.id === Number(appointmentId));
-      if (petSelected !== appointment.pet.id) {
-        changes.petId = petSelected;
-      }
       if (newPet) {
         const responseNewPet = await window.fetch(`${import.meta.env.VITE_API_URL}/patients/${patient.id}/pets`, {
           method: 'POST',
@@ -92,16 +91,36 @@ function EditForm({ patient }) {
         const { body: bodyNewPet } = await responseNewPet.json();
         changes.petId = bodyNewPet.id;
       }
-      await window.fetch(`${import.meta.env.VITE_API_URL}/appointments/${Number(appointmentId)}`, {
-        method: 'PATCH',
-        body: JSON.stringify(changes),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      if (!creatingAppointment) {
+        await window.fetch(`${import.meta.env.VITE_API_URL}/appointments/${Number(appointmentId)}`, {
+          method: 'PATCH',
+          body: JSON.stringify(changes),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } else {
+        const newAppointment = {
+          veterinarianId: user.id,
+          patientId: patient.id,
+          date: formatDateUS(values.date),
+          petId: changes.petId,
+          symptoms: values.symptoms,
+          prescription: '',
+          isCompleted: false,
+          price: 0,
+        };
+        await window.fetch(`${import.meta.env.VITE_API_URL}/appointments`, {
+          method: 'POST',
+          body: JSON.stringify(newAppointment),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
       setLoading(false);
       return Swal.fire(
-        'Se han guardado los cambios!',
+        `${creatingAppointment ? 'Se ha creado la cita!' : 'Se han guardado los cambios!'} `,
         '',
         'success',
       ).then(() => {
@@ -202,6 +221,7 @@ function EditForm({ patient }) {
                 </div>
                 <button
                   type="button"
+                  aria-controls="button"
                   className={`${newPet ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'} w-full p-2 uppercase text-white  my-3 font-bold cursor-pointer  transition-colors`}
                   onClick={newPet ? handleCancelNewPet : () => setNewPet(true)}
                 >

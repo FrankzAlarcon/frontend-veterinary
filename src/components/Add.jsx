@@ -2,7 +2,7 @@ import React from 'react';
 
 function Add({ onClick }) {
   return (
-    <button type="button" onClick={onClick}>
+    <button type="button" onClick={onClick} aria-controls="button">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-16 w-16 md:h-20 md:w-20 hover:scale-110 transition-transform"
