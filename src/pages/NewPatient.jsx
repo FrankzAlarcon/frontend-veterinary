@@ -12,17 +12,7 @@ function NewPatient() {
   const navigate = useNavigate();
   const { user } = useUserValues();
   const [loading, setLoading] = useState(false);
-  const [newPatient, setNewPatient] = useState({
-    name: '',
-    email: '',
-    petName: '',
-    animalType: '',
-    date: '',
-    symptoms: '',
-    isCompleted: false,
-    prescription: '',
-    price: 0,
-  });
+
   const handleSubmit = async (values, { resetForm }) => {
     setLoading(true);
     const options = (value) => ({
@@ -71,15 +61,15 @@ function NewPatient() {
       <div className="w-full bg-white rounded-md p-2 lg:px-5">
         <Formik
           initialValues={{
-            name: newPatient.name,
-            email: newPatient.email,
-            petName: newPatient.petName,
-            animalType: newPatient.animalType,
-            date: newPatient.date,
-            symptoms: newPatient.symptoms,
-            isCompleted: newPatient.isCompleted,
-            prescription: newPatient.prescription,
-            price: newPatient.price,
+            name: '',
+            email: '',
+            petName: '',
+            animalType: '',
+            date: '',
+            symptoms: '',
+            isCompleted: false,
+            prescription: '',
+            price: 0,
           }}
           onSubmit={handleSubmit}
           validationSchema={newPatientSchema}

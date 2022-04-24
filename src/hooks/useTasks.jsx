@@ -149,7 +149,6 @@ function useTasks() {
         const newTasks = tasks
           .map((taskItem) => (taskItem.id === task.id ? task : taskItem));
         setTasks(newTasks);
-        console.log(error);
       }
     }).catch((error) => {
       console.log(error);

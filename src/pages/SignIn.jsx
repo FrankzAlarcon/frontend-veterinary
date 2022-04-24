@@ -41,7 +41,7 @@ function SignIn() {
       resetForm();
       setError('');
     } catch (e) {
-      console.log(e);
+      setError('Algo inesperado a ocurrido. Por favor, recarga la página');
     }
   };
   return (
