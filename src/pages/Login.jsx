@@ -45,8 +45,7 @@ function Login() {
       setTasks(tasksBody);
       return resetForm();
     } catch (e) {
-      setError('Hemos tenido problemas. Por favor, Intentalo más tarde');
-      return console.log(e);
+      return setError('Hemos tenido problemas. Por favor, Intentalo más tarde');
     } finally {
       setLoading(false);
     }

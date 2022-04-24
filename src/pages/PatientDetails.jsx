@@ -24,6 +24,7 @@ function PatientDetails() {
   const [isEditingPatient, setIsEditingPatient] = useState(false);
   const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
+  const [errorCompleteAppointment, setErrorCompleteAppointment] = useState(false);
 
   useEffect(() => {
     getPatientDetails(id)
@@ -41,9 +42,8 @@ function PatientDetails() {
     }
     return appointment.isCompleted;
   });
-  const handleCompleteAppointment = (appointmentIdToComplete) => {
+  const handleSaveAppointment = (appointmentIdToComplete) => {
     setAppointmentCompletingId(appointmentIdToComplete);
-    setIsCompleting(true);
     if (priceInput && prescriptionInput) {
       Swal.fire({
         title: 'Confirmación',
@@ -80,17 +80,24 @@ function PatientDetails() {
           const newAppointments = appointments.map((appointment) => (appointment.id === bodyAppointment.id ? bodyAppointment : appointment));
           const newPat = { ...patient, appointments: newAppointments };
           setPatient(newPat);
-
           setAppointmentCompletingId(0);
           setIsCompleting(false);
           setPrescriptionInput('');
           setPriceInput('');
+          setErrorCompleteAppointment(false);
         }
       });
     } else {
-      console.log('no has escrito nada');
+      setErrorCompleteAppointment(true);
+      setTimeout(() => setErrorCompleteAppointment(false), 2000);
     }
   };
+
+  const handleCompleteAppointment = (appointmentIdToComplete) => {
+    setIsCompleting(true);
+    setAppointmentCompletingId(appointmentIdToComplete);
+  };
+
   const handleCancel = () => {
     setAppointmentCompletingId(0);
     setIsCompleting(false);
@@ -149,7 +156,6 @@ function PatientDetails() {
         name: nameInput,
         email: emailInput,
       };
-      console.log(`${import.meta.env.VITE_API_URL}/patients/${patient.id}`);
       await window.fetch(`${import.meta.env.VITE_API_URL}/patients/${patient.id}`, {
         method: 'PATCH',
         body: JSON.stringify(changes),
@@ -323,6 +329,10 @@ function PatientDetails() {
                   setPriceInput={setPriceInput}
                   prescriptionInput={prescriptionInput}
                   priceInput={priceInput}
+                  setIsCompleting={setIsCompleting}
+                  setAppointmentCompletingId={setAppointmentCompletingId}
+                  handleSaveAppointment={handleSaveAppointment}
+                  error={errorCompleteAppointment}
                 />
               ))
           }

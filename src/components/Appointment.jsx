@@ -1,14 +1,14 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { formatDate, formatMoney } from '../helpers';
+import Alert from './Alert';
 
 function Appointment({
   appointment, handleCompleteAppointment, isCompleting, appointmentCompletingId,
-  handleEditAppointment, handleCancel, setPriceInput,
-  setPrescriptionInput, priceInput, prescriptionInput,
+  handleCancel, setPriceInput, handleSaveAppointment,
+  setPrescriptionInput, priceInput, prescriptionInput, error,
 }) {
   const navigate = useNavigate();
-  const { id } = useParams();
   return (
     <div className="w-full bg-slate-100 rounded-md my-3 shadow-md p-2 ">
       <div className="md:flex md:gap-x-5 lg:px-4 lg:py-3">
@@ -69,6 +69,7 @@ function Appointment({
                 value={priceInput}
               />
             </label>
+            {error && <Alert type="error">Los campos son obligatorios</Alert>}
           </div>
         )
         }
@@ -79,7 +80,9 @@ function Appointment({
               type="button"
               className="p-2 text-center bg-lime-500 rounded-md uppercase font-bold text-white hover:bg-lime-400 transition-colors"
               aria-controls="button"
-              onClick={() => handleCompleteAppointment(appointment.id)}
+              onClick={(isCompleting && appointmentCompletingId === appointment.id)
+                ? () => handleSaveAppointment(appointment.id)
+                : () => handleCompleteAppointment(appointment.id)}
             >
               {(isCompleting && appointmentCompletingId === appointment.id) ? 'Guardar' : 'Completar'}
             </button>
@@ -119,6 +122,7 @@ function Appointment({
               value={priceInput}
             />
           </label>
+          {error && <Alert type="error">Los campos son obligatorios</Alert>}
         </div>
         )
         }
